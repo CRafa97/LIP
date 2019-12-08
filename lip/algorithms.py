@@ -1,3 +1,3 @@
-import math
+def boundary_set(image, t):
+    
 
-def 
