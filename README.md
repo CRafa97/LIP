@@ -3,8 +3,8 @@
 El procesamiento de imágenes mediante las operaciones aritméticas usuales no siempre reflejan la realidad física presenta en las imágenes. Por ello se utilizan modelos logarítmicos para el procesamiento de imágenes como el modelo LIP (Jourlin, 2016). El modelo LIP define una estructura algebraica que define operaciones como la suma y la multiplicación por un escalar de manera particular y cuya interpretación modela de mejor forma la realidad física de las imágenes.
 
 ## Funcionalidades de la Aplicación
-
-  <-- Breve explicación de la Aplicación -->
+  
+    Breve explicación de la Aplicación  
 
 - Suma, Resta y Multiplicación por un escalar expresadas en el modelo LIP
 

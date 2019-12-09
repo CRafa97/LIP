@@ -1,27 +1,12 @@
-from .utils import imgload
+from utils import imgload
 import numpy as np
 import itertools
 
-dirs8 = list(itertools.product([0,1,-1],[0,1,-1]))
-dirs8.remove((0,0))
-
 class LIPImage(object):
-    def __init__(self, values, M=256):
+    def __init__(self, values):
         self._values = np.array(values, dtype='uint8')
         self.x = len(values)
         self.y = len(values[0])
-        self._M = M
-
-    def N8(self, x):
-        px, py = x
-        return [self.gray_levels[px+ dx][py + dy] for dx, dy in dirs8]
-
-    def N4(self, x):
-        px, py = x
-        return [self.gray_levels[px - 1][py],
-                self.gray_levels[px + 1][py],
-                self.gray_levels[px][py - 1],
-                self.gray_levels[px][py + 1]]
 
     def __add__(self, g):
         if isinstance(g, int):
@@ -33,7 +18,7 @@ class LIPImage(object):
         m_f = self.gray_levels
         m_g = g.gray_levels
 
-        res = (m_f + m_g) - (m_f * m_g) / self.M
+        res = (m_f + m_g) - (m_f * m_g) / 256
         return LIPImage(res)
     
     def __sub__(self, g):
@@ -46,18 +31,17 @@ class LIPImage(object):
         m_f = self.gray_levels
         m_g = g.gray_levels
 
-        res = (m_f - m_g) / (1 - (m_g / self.M))
+        res = (m_f - m_g) / (1 - (m_g / 256))
         return LIPImage(res)
 
     def __rmul__(self, r):
         m_f = self.gray_levels
 
-        res = self.M - self.M * (1 - m_f/self.M)**r
+        res = 256 - 256 * (1 - m_f/256)**r
         return LIPImage(res)
 
     def __getitem__(self, tp):
-        x, y = tp
-        return self.values[x][y]
+        return self._values[tp]
 
     def __repr__(self):
         return self._values.__repr__()
@@ -85,4 +69,4 @@ class LIPImage(object):
 
     @property
     def M(self):
-        return self._M
+        return 256
