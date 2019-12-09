@@ -27,6 +27,18 @@ def N4(*x, filter=None):
           (px, py - 1)]
     return [n for n in n4 if filter(n)] if filter else n4
 
+def N8(*x, filter=None):
+    px, py = x
+    n8 = [(px + 1, py),
+          (px, py + 1),
+          (px - 1, py),
+          (px, py - 1),
+          (px - 1, py - 1),
+          (px + 1, py - 1),
+          (px - 1, py + 1),
+          (px + 1, py + 1)]
+    return [n for n in n8 if filter(n)] if filter else n8
+
 def inside(arr, idx:tuple):
     x, y = idx
     return all([x >= 0, y >= 0, x < len(arr), y < len(arr[0])]) 
