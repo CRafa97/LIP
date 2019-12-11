@@ -1,0 +1,73 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>D&D BitTorrent</title>
+    <!-- Bootstrap -->
+    <link href="{% static '/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static '/css/font-awesome.min.css' %}">
+    <link href="{% static '/css/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static '/css/prettyPhoto.css' %}" rel="stylesheet">
+    <link href="{% static '/css/style.css' %}" rel="stylesheet">
+    <link href="{% static '/css/responsive.css' %}" rel="stylesheet">
+    <!-- =======================================================
+      Theme Name: Gp
+      Theme URL: https://bootstrapmade.com/gp-free-multipurpose-html-bootstrap-templat/
+      Author: BootstrapMade
+      Author URL: https://bootstrapmade.com
+    ======================================================= -->
+
+</head>
+
+<body class="homepage">
+<header id="header">
+    <nav class="navbar navbar-fixed-top" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/home">D&D BitTorrent</a>
+            </div>
+            {% block menu-bar %}
+
+            {% endblock %}
+
+        </div>
+        <!--/.container-->
+    </nav>
+    <!--/nav-->
+
+</header>
+<!--/header-->
+
+{% block body %}
+
+{% endblock %}
+
+
+<!--/#footer-->
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+{#  <script src="{%  static '/js/jquery.min.js'%}"></script>#}
+<script src="{% static '/js/jquery.js' %}"></script>
+<script src="{% static '/js/bootstrap.min.js' %}"></script>
+<script src="{% static '/js/jquery.prettyPhoto.js' %}"></script>
+<script src="{% static '/js/jquery.isotope.min.js' %}"></script>
+<script src="{% static '/js/wow.min.js' %}"></script>
+<script src="{% static '/js/main.js' %}"></script>
+
+
+{% block js %}
+
+{% endblock %}
+</body>
+</html>

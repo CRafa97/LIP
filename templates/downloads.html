@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block menu-bar %}
+    <div class="collapse navbar-collapse navbar-right">
+        <ul class="nav navbar-nav">
+            <li><a href="/home">Home</a></li>
+            <li><a href="/files">Files</a></li>
+            <li class="active"><a href="/dwns">Downloads</a></li>
+            <li><a href="/uplds">Uploads</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class=slider>
+        <div class="container">
+            {% if not DOWNLOADS %}
+                <h2>No downloads to show</h2>
+            {% endif %}
+            <div class="progress-wrap">
+                {% for download in DOWNLOADS %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3>{{ download.name }}</h3>
+                            <div class="progress">
+                                <div class="progress-bar color1" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                                     aria-valuemax="100" id="{{ download.id }}" style="width: {{ download.width }}%">
+                                </div>
+                            </div>
+                        </div>
+                        <div class=col-md-offset-6 style="margin-top: 40px" id="action_container">
+                            {% if download.state == "fail" %}
+                                <button><a class="fa fa-download" href="{% url 'restore_download' download.id %}"
+                                           id="button{{ download.id }}"> Retry</a></button>
+                                <button id="cancelbutton{{ download.id }}"><a class="fa fa-ban" href="{% url 'cancel_download' download.id %}"
+                                           > Cancel</a></button>
+                            {% endif %}
+                            {% if download.state == "finish" %}
+                                <button class="btn"><a class="fa fa-clipboard"
+                                                       href="{% static "/Storage/" %}{{ download.name }}"
+                                                       id="button{{ download.id }}"> View</a>
+                                </button>
+                                 <button id="cancelbutton{{ download.id }}"><a class="fa fa-ban" href="{% url 'cancel_download' download.id %}"
+                                           > Cancel</a></button>
+
+                            {% endif %}
+                            {% if download.state == "ejecution" %}
+                                <button><a class="fa fa-pause" href="{% url 'pause_download' download.id %}"
+                                           id="button{{ download.id }}"> Pause</a></button>
+                                <button id="cancelbutton{{ download.id }}"><a class="fa fa-ban" href="{% url 'cancel_download' download.id %}"
+                                           > Cancel</a></button>
+                            {% endif %}
+                            {% if download.state == "pause" %}
+                                <button><a class="fa fa-play" href="{% url 'restore_download' download.id %}"
+                                           id="button{{ download.id }}"> Continue</a></button>
+                                <button id="cancelbutton{{ download.id }}"><a class="fa fa-ban" href="{% url 'cancel_download' download.id %}"
+                                           > Cancel</a></button>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            const interval = setInterval(() => {
+                $.ajax({
+                    url: '/updatepb',
+                    success: function (data) {
+                        console.log("Here !!!!!!!!");
+                        console.log(data);
+                        console.log(data["history"]["range"]["last"]);
+                        for (i = 0; i < parseInt(data["history"]["range"]["last"]); i++) {
+                            console.log("iterations");
+                            console.log(i);
+                            bar = document.getElementById(i.toString());
+                            progress = (data["history"][i.toString()]["copy"] / data["history"][i.toString()]["size"]) * 100
+                            console.log(progress);
+                            bar.style.width = progress.toFixed(0) + '%';
+                            bar.innerText = progress.toFixed(0) + '%';
+                            var keep = 0;
+                            if (data["history"][i.toString()]["state"] == "finish") {
+                                button = document.getElementById("button".concat(i.toString()));
+                                button.innerText = "View";
+                                button.href = "/static/Storage/".concat(data["history"][i.toString()]["file"]);
+                                button.className = "fa fa-clipboard";
+
+                                cancelbutton = document.getElementById("cancelbutton".concat(i.toString()));
+                                cancelbutton.style.display = "none";
+
+                                bar.className = "progress-bar color2"
+
+                            }
+                            if (data["history"][i.toString()]["state"] == "fail") {
+                                button = document.getElementById("button".concat(i.toString()));
+                                button.innerText = "Retry";
+                                button.href = "/restore/".concat(i.toString());
+                                bar.className = "progress-bar color4"
+                            }
+                            if (data["history"][i.toString()]["state"] != "fail" &&
+                                data["history"][i.toString()]["state"] != "finish" &&
+                                data["history"][i.toString()]["state"] != "paused"
+                            ) {
+                                keep = 1;
+                            }
+                        }
+                        if (keep == 0) {
+                            clearInterval(interval);
+                        }
+
+                    }
+                });
+            }, 1000)
+        });
+
+    </script>
+{% endblock %}

@@ -11,14 +11,22 @@ def sub_log(f, g):
 def mul_log(k, f):
     return int(256 - 256 * (1 - f/256)**k)
 
-def kohler_contrast(px, py, t, contrast=lac):
-    return min(contrast(px, t), contrast(py, t))
-
 def lmc(px, py):
-    return math.log(1 - max(px, py) / 256) / math.log(1 - min(px, py) / 256)
+    try:
+        if px == py:
+            return 1
+        return math.log(1 - max(px, py) / 256) / math.log(1 - min(px, py) / 256)
+    except ZeroDivisionError:
+        p = max(px, py)
+        return math.log(1 - p / 256) / math.log(1 - 1 / 256) 
 
 def lac(px, py):
-    return int(abs(px - py) / (1 - min(px, py) / 256))
+    n = abs(px - py)
+    d = (1 - min(px, py) / 256)
+    return n / d
+    
+def kohler_contrast(px, py, t, contrast=lac):
+    return min(contrast(px, t), contrast(py, t))
 
 def lip_kohler(image: LIPImage, contrast=lac):
     to = -1
@@ -59,7 +67,7 @@ def maximal_contrast(img: LIPImage, p, contrast=lac):
     c = 0
     for n in N8(x, y, filter=lambda x: inside(img.gray_levels, x)):
         c = max(c, contrast(img[p], img[n]))
-    return c
+    return int(c)
 
 def maximal_dynamic_range(img: LIPImage):
     fa = img.gray_levels.max()

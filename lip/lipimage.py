@@ -1,10 +1,10 @@
-from utils import imgload
+from .utils import imgload
 import numpy as np
 import itertools
 
 class LIPImage(object):
     def __init__(self, values):
-        self._values = np.array(values, dtype='uint8')
+        self._values = 255 - np.array(values, dtype='uint8')
         self.x = len(values)
         self.y = len(values[0])
 
@@ -41,7 +41,7 @@ class LIPImage(object):
         return LIPImage(res)
 
     def __getitem__(self, tp):
-        return self._values[tp]
+        return int(self._values[tp])
 
     def __repr__(self):
         return self._values.__repr__()
