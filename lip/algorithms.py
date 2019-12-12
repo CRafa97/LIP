@@ -1,5 +1,5 @@
-from utils import N4, N8, inside
-from lipimage import LIPImage
+from .utils import N4, N8, inside
+from .lipimage import LIPImage
 import math
 
 def add_log(f, g):
@@ -70,10 +70,20 @@ def maximal_contrast(img: LIPImage, p, contrast=lac):
     return int(c)
 
 def maximal_dynamic_range(img: LIPImage):
-    fa = img.gray_levels.max()
-    fb = img.gray_levels.min()
-    
+    fa = sup(img.gray_levels)
+    fb = inf(img.gray_levels)
+
     da = math.log(1 - fa / 256)
     db = math.log(1 - fb / 256)
 
     return math.log( da / db ) / math.log( db / da )
+
+def inf(arr):
+    m = 1
+    for e in arr.flat:
+        if e != 0:
+            m = min(m, e)
+    return m
+
+def sup(arr):
+    return arr.min()
