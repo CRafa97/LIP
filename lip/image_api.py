@@ -21,7 +21,7 @@ def _immap(img: LIPImage, func, folder, name):
         for j in range(img.gray_levels.shape[1]):
             im[i, j] = func(img,(i,j))
     imsave(pth, im)
-    return pth
+    return name
 
 def lac_avg(img: LIPImage, folder):
     return _immap(img, lac_average_contrast, folder, 'lac_avg.jpg')

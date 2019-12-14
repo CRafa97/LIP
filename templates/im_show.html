@@ -51,10 +51,8 @@
             {#              <img src="{%  static '/images/bit/8.jpg'%}" class="img-responsive" alt="">#}
             {#            </div>#}
             {#            <div class="item">#}
-            {% block image %}
-                Image
-                <!-- <img src="" class="img-responsive" alt=""> -->
-            {% endblock %}
+            <p>{{Image}}</p>
+            <img src="{% static '' %}{{Image}}" class="img-responsive" alt="">        
             {#            </div>#}
             {#              <div class="item">#}
             {#              <img src="{%  static '/images/bit/10.jpg'%}" class="img-responsive" alt="">#}
