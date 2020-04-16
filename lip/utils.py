@@ -1,6 +1,6 @@
 from skimage import io
 from skimage.color import rgb2gray
-import numpy as np 
+import numpy as np
 
 def imgload(fname, in_gray=False):
     """ Loads a image and convert it to the gray scale format(0 - 255), use in_gray=True for load 
@@ -26,6 +26,19 @@ def threshold(A, t):
         for j in range(A.shape[1]):
             m[i, j] = umb(A[i, j])
     return m
+
+def wavelet_threshold(t,*coef):
+    WAs = [coef[0][0], coef[0][1], coef[0][2]]
+    WTs = [np.zeros(coef[0][0].shape),np.zeros(coef[0][1].shape),np.zeros(coef[0][2].shape)]
+   
+    for k,wa in enumerate(WAs):
+        for i in range(wa.shape[0]):
+            for j in range(wa.shape[1]):
+                if wa[i,j] != 0:
+                    WTs[k][i, j] = max(1 - t/abs(wa[i, j]),0)*wa[i, j]
+                else:
+                    WTs[k][i, j] = 1
+    return (WTs[0], WTs[1], WTs[2])
 
 def N4(*x, filter=None):
     px, py = x

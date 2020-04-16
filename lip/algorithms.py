@@ -1,6 +1,9 @@
-from .utils import N4, N8, inside
+from .utils import N4, N8, inside, wavelet_threshold
 from .lipimage import LIPImage
 import math
+import matplotlib.pyplot as plt
+from pywt import wavedec2, waverec2
+
 
 def add_log(f, g):
     return int(f + g - ((f * g) / 256))
@@ -77,6 +80,20 @@ def maximal_dynamic_range(img: LIPImage):
     db = math.log(1 - fb / 256)
 
     return math.log( da / db ) / math.log( db / da )
+
+def log_wavelet_denoise(img: LIPImage, wavelet, treshold):
+    coeffs = wavedec2(img.gray_levels,wavelet,level=4)
+    for i in range(1, 5):
+        coeffs[i] = wavelet_threshold(treshold, coeffs[i])
+
+    img = waverec2(coeffs,wavelet)
+    return img
+
+def histogram_standard_deviation(img: LIPImage, lmbda):
+    log_hom = mul_log(lmbda, img)
+    hist = plt.hist(log_hom, bins=256)
+    #No se q hacer :)
+    pass
 
 def inf(arr):
     m = 1
